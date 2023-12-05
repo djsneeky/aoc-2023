@@ -134,7 +134,7 @@ pub fn solve_day1_all() -> (u32, u32) {
 }
 
 pub fn solve_day1_part1() -> u32 {
-    let contents: String = read_file("src/day1/input-p1.txt");
+    let contents: String = read_file("src/day1/input.txt");
     let vec_contents: Vec<&str> = contents.split('\n').collect();
     let mut sum: u32 = 0;
     for content in vec_contents {
@@ -148,7 +148,7 @@ pub fn solve_day1_part1() -> u32 {
 }
 
 pub fn solve_day1_part2() -> u32 {
-    let contents: String = read_file("src/day1/input-p1.txt");
+    let contents: String = read_file("src/day1/input.txt");
     let vec_contents: Vec<&str> = contents.split('\n').collect();
     let mut sum: u32 = 0;
     for content in vec_contents {
