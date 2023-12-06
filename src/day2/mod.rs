@@ -12,8 +12,6 @@ fn read_file(path: &str) -> String {
     contents
 }
 
-// fn parse_
-
 pub fn solve_day2_all() -> (u32, u32) {
     (solve_day2_part1(), solve_day2_part2())
 }
