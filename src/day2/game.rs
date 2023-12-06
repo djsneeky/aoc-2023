@@ -3,15 +3,15 @@ use std::str::FromStr;
 
 #[derive(Debug, PartialEq)]
 pub struct Game {
-    id: u32,
-    entries: Vec<Entry>,
+    pub id: u32,
+    pub entries: Vec<Entry>,
 }
 
 #[derive(Debug, PartialEq)]
-struct Entry {
-    red: u32,
-    green: u32,
-    blue: u32,
+pub struct Entry {
+    pub red: u32,
+    pub green: u32,
+    pub blue: u32,
 }
 
 #[derive(Debug, PartialEq, Eq)]
