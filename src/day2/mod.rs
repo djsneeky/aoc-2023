@@ -10,11 +10,15 @@ fn read_file(path: &str) -> String {
 // fn parse_
 
 pub fn solve_day2_all() -> (u32, u32) {
-    (0, 0)
+    (solve_day2_part1(), 0)
 }
 
 pub fn solve_day2_part1() -> u32 {
     let contents: String = read_file("src/day2/input.txt");
+    for line in contents.lines() {
+        let game = line.parse::<game::Game>();
+        print!("{}", game.unwrap());
+    }
     0
 }
 
