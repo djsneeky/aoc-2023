@@ -1,4 +1,4 @@
-use std::{fs, usize};
+use std::{error::Error, fs, usize};
 
 enum SearchDirection {
     Forward,
@@ -108,11 +108,6 @@ fn find_first_word<'a>(
     return_word
 }
 
-fn read_file(path: &str) -> String {
-    let contents: String = fs::read_to_string(path).expect("Failed to read file");
-    contents
-}
-
 fn word_to_number(word: &str) -> Option<u32> {
     match word.trim().to_lowercase().as_str() {
         "zero" => Some(0),
@@ -129,12 +124,12 @@ fn word_to_number(word: &str) -> Option<u32> {
     }
 }
 
-pub fn solve_day1_all() -> (u32, u32) {
+pub fn solve_day1() -> (Result<u32, Box<dyn Error>>, Result<u32, Box<dyn Error>>) {
     (solve_day1_part1(), solve_day1_part2())
 }
 
-pub fn solve_day1_part1() -> u32 {
-    let contents: String = read_file("src/day1/input.txt");
+pub fn solve_day1_part1() -> Result<u32, Box<dyn Error>> {
+    let contents: String = fs::read_to_string("src/day1/input.txt")?;
     let vec_contents: Vec<&str> = contents.split('\n').collect();
     let mut sum: u32 = 0;
     for content in vec_contents {
@@ -144,11 +139,11 @@ pub fn solve_day1_part1() -> u32 {
             None => continue,
         }
     }
-    sum
+    Ok(sum)
 }
 
-pub fn solve_day1_part2() -> u32 {
-    let contents: String = read_file("src/day1/input.txt");
+pub fn solve_day1_part2() -> Result<u32, Box<dyn Error>> {
+    let contents: String = fs::read_to_string("src/day1/input.txt")?;
     let vec_contents: Vec<&str> = contents.split('\n').collect();
     let mut sum: u32 = 0;
     for content in vec_contents {
@@ -158,7 +153,7 @@ pub fn solve_day1_part2() -> u32 {
             None => continue,
         }
     }
-    sum
+    Ok(sum)
 }
 
 #[cfg(test)]
@@ -211,5 +206,15 @@ mod tests {
             find_first_word(&input, &WORDS_AND_NUMBERS, SearchDirection::Reverse),
             Some("7")
         );
+    }
+
+    #[test]
+    fn test_solve_day1_part1() {
+        assert_eq!(solve_day1_part1().unwrap(), 55538);
+    }
+
+    #[test]
+    fn test_solve_day1_part2() {
+        assert_eq!(solve_day1_part2().unwrap(), 54875);
     }
 }
