@@ -13,6 +13,7 @@ fn main() {
 struct Card {
     input_numbers: Vec<u32>,
     winning_numbers: Vec<u32>,
+    copies: u32,
 }
 
 type Cards = Vec<Card>;
@@ -34,7 +35,25 @@ fn solve_day4_part1() -> Result<u32, Box<dyn Error>> {
 }
 
 fn solve_day4_part2() -> Result<u32, Box<dyn Error>> {
-    todo!();
+    let contents: String = fs::read_to_string("src/day4/input.txt")?;
+
+    let mut cards: Vec<Card> = parse_input(contents);
+
+    for (index, card) in cards.iter().enumerate() {
+        let matches: u32 = get_num_matches(&card);
+        // iterate over the next matches cards and increment copies
+        if matches > 0 {
+            let end_index = if (index as u32) + matches > cards.len() as u32 {
+                (index as u32) + matches
+            } else {
+                cards.len() as u32
+            };
+            for i in (index as u32) + 1..end_index {
+                cards[i as usize].copies += 1;
+            }
+        }
+    }
+    Ok(0)
 }
 
 #[allow(dead_code)]
@@ -67,6 +86,7 @@ fn parse_input(contents: String) -> Cards {
                 .split_whitespace()
                 .map(|s| s.parse::<u32>().unwrap())
                 .collect(),
+            copies: 0,
         };
         cards.push(card);
     }
@@ -87,6 +107,18 @@ fn get_point_value(card: &Card) -> u32 {
         }
     }
     score
+}
+
+fn get_num_matches(card: &Card) -> u32 {
+    let mut matches: u32 = 0;
+    for input_value in &card.input_numbers {
+        for winning_value in &card.winning_numbers {
+            if input_value == winning_value {
+                matches += 1;
+            }
+        }
+    }
+    matches
 }
 
 #[cfg(test)]
