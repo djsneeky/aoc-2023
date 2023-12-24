@@ -6,8 +6,10 @@ const SYMBOLS: [char; 10] = ['@', '#', '$', '%', '&', '*', '-', '+', '=', '/'];
 
 struct Cell {
     data: char,
-    seen: bool,
+    visited: bool,
 }
+
+type Matrix = Vec<Vec<Cell>>;
 
 pub fn solve_day3() -> (Result<u32, Box<dyn Error>>, Result<u32, Box<dyn Error>>) {
     (solve_day3_part1(), solve_day3_part2())
