@@ -1,5 +1,14 @@
 use std::{error::Error, fs, usize};
 
+fn main() {
+    let day1_res = solve_day1();
+    println!(
+        "Day 1 Result:\n\tPart 1: {}\n\tPart 2: {}",
+        day1_res.0.unwrap(),
+        day1_res.1.unwrap()
+    );
+}
+
 enum SearchDirection {
     Forward,
     Reverse,

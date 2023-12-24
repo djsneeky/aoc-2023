@@ -1,5 +1,14 @@
 use std::{error::Error, fs};
 
+fn main() {
+    let day4_res = solve_day4();
+    println!(
+        "Day 4 Result:\n\tPart 1: {}\n\tPart 2: {}",
+        day4_res.0.unwrap(),
+        day4_res.1.unwrap()
+    );
+}
+
 #[derive(Debug)]
 struct Card {
     input_numbers: Vec<u32>,
@@ -15,7 +24,7 @@ pub fn solve_day4() -> (Result<u32, Box<dyn Error>>, Result<u32, Box<dyn Error>>
 fn solve_day4_part1() -> Result<u32, Box<dyn Error>> {
     let contents: String = fs::read_to_string("src/day4/input.txt")?;
 
-    let cards = parse_input(contents);
+    let cards: Vec<Card> = parse_input(contents);
 
     let mut sum: u32 = 0;
     for card in cards {
@@ -28,6 +37,7 @@ fn solve_day4_part2() -> Result<u32, Box<dyn Error>> {
     todo!();
 }
 
+#[allow(dead_code)]
 fn solve_day4_sample() -> Result<u32, Box<dyn Error>> {
     let contents: String = fs::read_to_string("src/day4/sample-input.txt")?;
 

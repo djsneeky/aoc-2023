@@ -1,6 +1,13 @@
 use std::{error::Error, fs};
 
-// use ndarray::{Array, Array2};
+fn main() {
+    let day3_res = solve_day3();
+    println!(
+        "Day 3 Result:\n\tPart 1: {}\n\tPart 2: {}",
+        day3_res.0.unwrap(),
+        day3_res.1.unwrap()
+    );
+}
 
 const SYMBOLS: [char; 10] = ['@', '#', '$', '%', '&', '*', '-', '+', '=', '/'];
 

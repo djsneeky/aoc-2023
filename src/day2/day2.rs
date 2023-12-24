@@ -4,6 +4,15 @@ use std::fs;
 
 mod game;
 
+fn main() {
+    let day2_res = solve_day2();
+    println!(
+        "Day 2 Result:\n\tPart 1: {}\n\tPart 2: {}",
+        day2_res.0.unwrap(),
+        day2_res.1.unwrap()
+    );
+}
+
 const MAX_RED: u32 = 12;
 const MAX_GREEN: u32 = 13;
 const MAX_BLUE: u32 = 14;
