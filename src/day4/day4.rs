@@ -19,11 +19,14 @@ struct Card {
 type Cards = Vec<Card>;
 
 pub fn solve_day4() -> (Result<u32, Box<dyn Error>>, Result<u32, Box<dyn Error>>) {
-    (solve_day4_part1(), solve_day4_part2())
+    (
+        solve_day4_part1("src/day4/input.txt"),
+        solve_day4_part2("src/day4/input.txt"),
+    )
 }
 
-fn solve_day4_part1() -> Result<u32, Box<dyn Error>> {
-    let contents: String = fs::read_to_string("src/day4/input.txt")?;
+fn solve_day4_part1(input_path: &str) -> Result<u32, Box<dyn Error>> {
+    let contents: String = fs::read_to_string(input_path)?;
 
     let cards: Vec<Card> = parse_input(contents);
 
@@ -34,39 +37,26 @@ fn solve_day4_part1() -> Result<u32, Box<dyn Error>> {
     Ok(sum)
 }
 
-fn solve_day4_part2() -> Result<u32, Box<dyn Error>> {
-    let contents: String = fs::read_to_string("src/day4/input.txt")?;
+fn solve_day4_part2(input_path: &str) -> Result<u32, Box<dyn Error>> {
+    let contents: String = fs::read_to_string(input_path)?;
 
     let mut cards: Vec<Card> = parse_input(contents);
+    let mut mut_refs: Vec<_> = cards.iter_mut().collect();
+    let mut total_copies: u32 = 0;
 
-    for (index, card) in cards.iter().enumerate() {
-        let matches: u32 = get_num_matches(&card);
-        // iterate over the next matches cards and increment copies
-        if matches > 0 {
-            let end_index = if (index as u32) + matches > cards.len() as u32 {
-                (index as u32) + matches
-            } else {
-                cards.len() as u32
-            };
-            for i in (index as u32) + 1..end_index {
-                cards[i as usize].copies += 1;
+    let cards_len = mut_refs.len() as u32;
+    for i in 0..cards_len {
+        let n: u32 = get_num_matches(&mut_refs[i as usize]);
+        // iterate over the next n cards and increment copies
+        if n > 0 {
+            let end_index: u32 = if i + n > cards_len { i + n } else { cards_len };
+            for j in i + 1..end_index {
+                mut_refs[j as usize].copies += 1;
+                total_copies += 1;
             }
         }
     }
-    Ok(0)
-}
-
-#[allow(dead_code)]
-fn solve_day4_sample() -> Result<u32, Box<dyn Error>> {
-    let contents: String = fs::read_to_string("src/day4/sample-input.txt")?;
-
-    let cards = parse_input(contents);
-
-    let mut sum: u32 = 0;
-    for card in cards {
-        sum += get_point_value(&card);
-    }
-    Ok(sum)
+    Ok(total_copies)
 }
 
 fn parse_input(contents: String) -> Cards {
@@ -126,17 +116,22 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_solve_day4_sample() {
-        assert_eq!(solve_day4_sample().unwrap(), 13);
+    fn test_solve_day4_part1_sample() {
+        assert_eq!(solve_day4_part1("src/day4/sample-input.txt").unwrap(), 13);
     }
 
     #[test]
     fn test_solve_day4_part1() {
-        assert_eq!(solve_day4_part1().unwrap(), 25174)
+        assert_eq!(solve_day4_part1("src/day4/input.txt").unwrap(), 25174)
+    }
+
+    #[test]
+    fn test_solve_day4_part2_sample() {
+        assert_eq!(solve_day4_part2("src/day4/sample-input.txt").unwrap(), 30);
     }
 
     #[test]
     fn test_solve_day4_part2() {
-        assert_eq!(solve_day4_part2().unwrap(), 0);
+        assert_eq!(solve_day4_part2("src/day4/input.txt").unwrap(), 0);
     }
 }
