@@ -46,13 +46,17 @@ fn solve_day4_part2(input_path: &str) -> Result<u32, Box<dyn Error>> {
 
     let cards_len = mut_refs.len() as u32;
     for i in 0..cards_len {
+        total_copies += &mut_refs[i as usize].copies;
         let n: u32 = get_num_matches(&mut_refs[i as usize]);
         // iterate over the next n cards and increment copies
         if n > 0 {
-            let end_index: u32 = if i + n > cards_len { i + n } else { cards_len };
+            let end_index: u32 = if i + n > cards_len {
+                cards_len
+            } else {
+                i + n + 1
+            };
             for j in i + 1..end_index {
-                mut_refs[j as usize].copies += 1;
-                total_copies += 1;
+                mut_refs[j as usize].copies += mut_refs[i as usize].copies;
             }
         }
     }
@@ -76,7 +80,7 @@ fn parse_input(contents: String) -> Cards {
                 .split_whitespace()
                 .map(|s| s.parse::<u32>().unwrap())
                 .collect(),
-            copies: 0,
+            copies: 1,
         };
         cards.push(card);
     }
@@ -132,6 +136,6 @@ mod tests {
 
     #[test]
     fn test_solve_day4_part2() {
-        assert_eq!(solve_day4_part2("src/day4/input.txt").unwrap(), 0);
+        assert_eq!(solve_day4_part2("src/day4/input.txt").unwrap(), 6420979);
     }
 }
