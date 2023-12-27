@@ -59,6 +59,12 @@ impl FromStr for RangeMap {
     }
 }
 
+#[derive(Debug)]
+struct SeedRange {
+    pub start: u64,
+    pub range: u64,
+}
+
 pub fn solve_day5() -> (Result<u64, Box<dyn Error>>, Result<u64, Box<dyn Error>>) {
     (
         solve_day5_part1("src/day5/input.txt"),
@@ -71,21 +77,21 @@ fn solve_day5_part1(input_path: &str) -> Result<u64, Box<dyn Error>> {
 
     let seeds: Vec<u64> = contents
         .strip_prefix("seeds: ")
-        .unwrap()
+        .expect("file should start with 'seeds:'")
         .lines()
         .next()
-        .unwrap()
+        .expect("file first line not found")
         .split_whitespace()
         .map(|s| s.parse::<u64>().unwrap())
         .collect();
 
     let mut maps: Vec<Vec<RangeMap>> = vec![];
-    let maps_str: &str = contents.split_once("\n\n").unwrap().1.trim();
-    let maps_str_vec: Vec<&str> = maps_str.split("\n\n").collect();
+    let maps_str: &str = contents.split_once("\r\n\r\n").unwrap().1.trim();
+    let maps_str_vec: Vec<&str> = maps_str.split("\r\n\r\n").collect();
 
     for map_str in maps_str_vec {
         let range_maps: Vec<RangeMap> = map_str
-            .split('\n')
+            .split("\r\n")
             .skip(1)
             .map(|s| s.parse::<RangeMap>().unwrap())
             .collect();
@@ -108,13 +114,72 @@ fn solve_day5_part1(input_path: &str) -> Result<u64, Box<dyn Error>> {
         locations.push(mapped_val);
     }
 
-    let min = locations.iter().min().ok_or("no min found")?.clone();
+    let min: u64 = locations.iter().min().ok_or("no min found")?.clone();
 
     Ok(min)
 }
 
+// brute force all seed combinations
 fn solve_day5_part2(input_path: &str) -> Result<u64, Box<dyn Error>> {
-    todo!();
+    let contents: String = fs::read_to_string(input_path)?;
+
+    let seeds: Vec<SeedRange> = contents
+        .strip_prefix("seeds: ")
+        .unwrap()
+        .lines()
+        .next()
+        .unwrap()
+        .split_whitespace()
+        .collect::<Vec<_>>()
+        .chunks(2)
+        .map(|s| SeedRange {
+            start: s
+                .get(0)
+                .expect("index 0 in chunk should be gettable")
+                .parse::<u64>()
+                .expect("index 1 in chunk should be parseable"),
+            range: s
+                .get(1)
+                .expect("index 1 in chunk should be gettable")
+                .parse::<u64>()
+                .expect("index 1 in chunk should be parseable"),
+        })
+        .collect();
+
+    let mut maps: Vec<Vec<RangeMap>> = vec![];
+    let maps_str: &str = contents.split_once("\r\n\r\n").unwrap().1.trim();
+    let maps_str_vec: Vec<&str> = maps_str.split("\r\n\r\n").collect();
+
+    for map_str in maps_str_vec {
+        let range_maps: Vec<RangeMap> = map_str
+            .split("\r\n")
+            .skip(1)
+            .map(|s| s.parse::<RangeMap>().unwrap())
+            .collect();
+        maps.push(range_maps);
+    }
+
+    // map seeds through all the maps
+    let mut locations: Vec<u64> = vec![];
+    for seed_range in seeds {
+        for seed in seed_range.start..seed_range.start + seed_range.range {
+            let mut mapped_val: u64 = seed;
+            for map in &maps {
+                for range_map in map {
+                    let new_mapped_val: u64 = range_map.get_output_value(mapped_val);
+                    if new_mapped_val != mapped_val {
+                        mapped_val = new_mapped_val;
+                        break;
+                    }
+                }
+            }
+            locations.push(mapped_val);
+        }
+    }
+
+    let min: u64 = locations.iter().min().ok_or("no min found")?.clone();
+
+    Ok(min)
 }
 
 #[cfg(test)]
