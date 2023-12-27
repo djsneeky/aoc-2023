@@ -80,7 +80,7 @@ fn solve_day5_part1(input_path: &str) -> Result<u64, Box<dyn Error>> {
         .collect();
 
     let mut maps: Vec<Vec<RangeMap>> = vec![];
-    let maps_str: &str = contents.split_once("\n\n").unwrap().1;
+    let maps_str: &str = contents.split_once("\n\n").unwrap().1.trim();
     let maps_str_vec: Vec<&str> = maps_str.split("\n\n").collect();
 
     for map_str in maps_str_vec {
@@ -89,7 +89,6 @@ fn solve_day5_part1(input_path: &str) -> Result<u64, Box<dyn Error>> {
             .skip(1)
             .map(|s| s.parse::<RangeMap>().unwrap())
             .collect();
-        println!("{:?}", range_maps);
         maps.push(range_maps);
     }
 
@@ -129,7 +128,7 @@ mod tests {
 
     #[test]
     fn test_solve_day5_part1() {
-        assert_eq!(solve_day5_part1("src/day5/input.txt").unwrap(), 0)
+        assert_eq!(solve_day5_part1("src/day5/input.txt").unwrap(), 389056265)
     }
 
     #[test]
