@@ -40,17 +40,17 @@ fn solve_day3_sample() -> Result<u32, Box<dyn Error>> {
 
 fn sum_numbers_around_symbols(mut matrix: Matrix, symbols: &[char]) -> Result<u32, Box<dyn Error>> {
     let mut sum: u32 = 0;
-    for (i, row) in matrix.iter().enumerate() {
-        for (j, element) in row.iter().enumerate() {
-            if symbols.contains(&element.data) {
-                if let Some((row_found_idx, col_found_idx)) = find_number(&matrix, i, j) {
-                    let number = get_complete_number(&mut matrix, row_found_idx, col_found_idx);
-                    sum += number;
-                }
-            } else {
-            }
-        }
-    }
+    // for (i, row) in matrix.iter().enumerate() {
+    //     for (j, element) in row.iter().enumerate() {
+    //         if symbols.contains(&element.data) {
+    //             if let Some((row_found_idx, col_found_idx)) = find_number(&matrix, i, j) {
+    //                 let number = get_complete_number(&mut matrix, row_found_idx, col_found_idx);
+    //                 sum += number;
+    //             }
+    //         } else {
+    //         }
+    //     }
+    // }
     Ok(sum)
 }
 
@@ -82,9 +82,9 @@ fn get_complete_number(matrix: &mut Matrix, row_index: usize, col_index: usize) 
 
     loop {
         if let Some(index) = col_index.checked_sub(i) {
-            if matrix[row_index][index].data.is_ascii_digit() && !matrix[row_index][index].seen {
+            if matrix[row_index][index].data.is_ascii_digit() && !matrix[row_index][index].visited {
                 number.insert(0, matrix[row_index][index].data);
-                matrix[row_index][index].seen = true;
+                matrix[row_index][index].visited = true;
                 i += 1;
             } else {
                 break;
@@ -119,7 +119,7 @@ fn parse_input(input: &str) -> Result<Matrix, Box<dyn Error>> {
             line.chars()
                 .map(|c| Cell {
                     data: c,
-                    seen: false,
+                    visited: false,
                 })
                 .collect()
         })
