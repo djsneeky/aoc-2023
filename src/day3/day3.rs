@@ -32,64 +32,59 @@ fn solve_day3_part2() -> Result<u32, Box<dyn Error>> {
 
 fn solve_day3_sample() -> Result<u32, Box<dyn Error>> {
     let contents: String = fs::read_to_string("src/day3/sample-input.txt")?;
-    let matrix: Vec<Vec<char>> = parse_input(&contents)?;
+    let matrix: Matrix = parse_input(&contents)?;
 
     let sum = sum_numbers_around_symbols(matrix, &SYMBOLS)?;
     Ok(sum)
 }
 
-fn sum_numbers_around_symbols(
-    matrix: Vec<Vec<char>>,
-    symbols: &[char],
-) -> Result<u32, Box<dyn Error>> {
+fn sum_numbers_around_symbols(mut matrix: Matrix, symbols: &[char]) -> Result<u32, Box<dyn Error>> {
     let mut sum: u32 = 0;
     for (i, row) in matrix.iter().enumerate() {
         for (j, element) in row.iter().enumerate() {
-            if symbols.contains(element) {
+            if symbols.contains(&element.data) {
                 if let Some((row_found_idx, col_found_idx)) = find_number(&matrix, i, j) {
-                    let number = get_complete_number(&matrix, row_found_idx, col_found_idx);
+                    let number = get_complete_number(&mut matrix, row_found_idx, col_found_idx);
                     sum += number;
                 }
+            } else {
             }
         }
     }
     Ok(sum)
 }
 
-fn find_number(
-    matrix: &Vec<Vec<char>>,
-    row_index: usize,
-    col_index: usize,
-) -> Option<(usize, usize)> {
-    if matrix[row_index - 1][col_index - 1].is_ascii_digit() {
+fn find_number(matrix: &Matrix, row_index: usize, col_index: usize) -> Option<(usize, usize)> {
+    if matrix[row_index - 1][col_index - 1].data.is_ascii_digit() {
         Some((row_index - 1, col_index - 1))
-    } else if matrix[row_index - 1][col_index].is_ascii_digit() {
+    } else if matrix[row_index - 1][col_index].data.is_ascii_digit() {
         Some((row_index - 1, col_index))
-    } else if matrix[row_index - 1][col_index + 1].is_ascii_digit() {
+    } else if matrix[row_index - 1][col_index + 1].data.is_ascii_digit() {
         Some((row_index - 1, col_index + 1))
-    } else if matrix[row_index][col_index - 1].is_ascii_digit() {
+    } else if matrix[row_index][col_index - 1].data.is_ascii_digit() {
         Some((row_index, col_index - 1))
-    } else if matrix[row_index][col_index + 1].is_ascii_digit() {
+    } else if matrix[row_index][col_index + 1].data.is_ascii_digit() {
         Some((row_index, col_index + 1))
-    } else if matrix[row_index + 1][col_index - 1].is_ascii_digit() {
+    } else if matrix[row_index + 1][col_index - 1].data.is_ascii_digit() {
         Some((row_index + 1, col_index - 1))
-    } else if matrix[row_index + 1][col_index].is_ascii_digit() {
+    } else if matrix[row_index + 1][col_index].data.is_ascii_digit() {
         Some((row_index + 1, col_index))
-    } else if matrix[row_index + 1][col_index + 1].is_ascii_digit() {
+    } else if matrix[row_index + 1][col_index + 1].data.is_ascii_digit() {
         Some((row_index + 1, col_index + 1))
     } else {
         None
     }
 }
 
-fn get_complete_number(matrix: &Vec<Vec<char>>, row_index: usize, col_index: usize) -> u32 {
+fn get_complete_number(matrix: &mut Matrix, row_index: usize, col_index: usize) -> u32 {
     let mut number: String = String::new();
     let mut i: usize = 0;
 
     loop {
         if let Some(index) = col_index.checked_sub(i) {
-            if matrix[row_index][index].is_ascii_digit() {
-                number.insert(0, matrix[row_index][index]);
+            if matrix[row_index][index].data.is_ascii_digit() && !matrix[row_index][index].seen {
+                number.insert(0, matrix[row_index][index].data);
+                matrix[row_index][index].seen = true;
                 i += 1;
             } else {
                 break;
@@ -101,8 +96,8 @@ fn get_complete_number(matrix: &Vec<Vec<char>>, row_index: usize, col_index: usi
     let mut j: usize = 1;
     loop {
         if let Some(index) = col_index.checked_add(j) {
-            if matrix[row_index][index].is_ascii_digit() {
-                number.push(matrix[row_index][index]);
+            if matrix[row_index][index].data.is_ascii_digit() {
+                number.push(matrix[row_index][index].data);
                 j += 1;
             } else {
                 break;
@@ -117,11 +112,18 @@ fn get_complete_number(matrix: &Vec<Vec<char>>, row_index: usize, col_index: usi
         .expect("completed number should be parseable")
 }
 
-fn parse_input(input: &str) -> Result<Vec<Vec<char>>, Box<dyn Error>> {
+fn parse_input(input: &str) -> Result<Matrix, Box<dyn Error>> {
     let matrix = input
         .lines()
-        .map(|line| line.chars().collect::<Vec<char>>())
-        .collect::<Vec<_>>();
+        .map(|line| {
+            line.chars()
+                .map(|c| Cell {
+                    data: c,
+                    seen: false,
+                })
+                .collect()
+        })
+        .collect();
     Ok(matrix)
 }
 
