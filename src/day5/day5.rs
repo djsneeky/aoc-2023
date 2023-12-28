@@ -193,7 +193,7 @@ mod tests {
 
     #[test]
     fn test_solve_day5_part1() {
-        assert_eq!(solve_day5_part1("src/day5/input.txt").unwrap(), 389056265)
+        assert_eq!(solve_day5_part1("src/day5/input.txt").unwrap(), 389056265);
     }
 
     #[test]

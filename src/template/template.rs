@@ -17,10 +17,12 @@ pub fn solve_day5() -> (Result<u32, Box<dyn Error>>, Result<u32, Box<dyn Error>>
 }
 
 fn solve_day5_part1(input_path: &str) -> Result<u32, Box<dyn Error>> {
+    let contents: String = fs::read_to_string(input_path)?;
     todo!();
 }
 
 fn solve_day5_part2(input_path: &str) -> Result<u32, Box<dyn Error>> {
+    let contents: String = fs::read_to_string(input_path)?;
     todo!();
 }
 
@@ -35,7 +37,7 @@ mod tests {
 
     #[test]
     fn test_solve_day5_part1() {
-        assert_eq!(solve_day5_part1("src/day5/input.txt").unwrap(), 0)
+        assert_eq!(solve_day5_part1("src/day5/input.txt").unwrap(), 0);
     }
 
     #[test]

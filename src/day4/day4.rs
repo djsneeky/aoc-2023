@@ -126,7 +126,7 @@ mod tests {
 
     #[test]
     fn test_solve_day4_part1() {
-        assert_eq!(solve_day4_part1("src/day4/input.txt").unwrap(), 25174)
+        assert_eq!(solve_day4_part1("src/day4/input.txt").unwrap(), 25174);
     }
 
     #[test]

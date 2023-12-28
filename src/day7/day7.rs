@@ -31,22 +31,18 @@ fn solve_day7_part1(input_path: &str) -> Result<u32, Box<dyn Error>> {
     }
     // sort hands according to enum
     hands.sort_by(|a, b| {
-        let mut order = a.highest_hand.cmp(&b.highest_hand);
+        let mut order = b.highest_hand.cmp(&a.highest_hand);
 
         if order == std::cmp::Ordering::Equal {
             for (card_a, card_b) in a.cards.chars().into_iter().zip(b.cards.chars().into_iter()) {
                 if card_a == card_b {
                     continue;
                 }
-                let card_order = CARDS
+                order = CARDS
                     .iter()
                     .position(|&c| c == card_b)
                     .cmp(&CARDS.iter().position(|&c| c == card_a));
-
-                if card_order != std::cmp::Ordering::Equal {
-                    order = card_order;
-                }
-                // std::cmp::Ordering::Equal
+                break;
             }
         }
         order
@@ -70,12 +66,12 @@ mod tests {
 
     #[test]
     fn test_solve_day7_part1_sample() {
-        assert_eq!(solve_day7_part1("src/day7/sample-input.txt").unwrap(), 0);
+        assert_eq!(solve_day7_part1("src/day7/sample-input.txt").unwrap(), 6440);
     }
 
     #[test]
     fn test_solve_day7_part1() {
-        assert_eq!(solve_day7_part1("src/day7/input.txt").unwrap(), 0)
+        assert_eq!(solve_day7_part1("src/day7/input.txt").unwrap(), 254764262);
     }
 
     #[test]

@@ -172,13 +172,13 @@ mod tests {
     #[test]
     fn test_combine_first_last_int() {
         let input: String = "jk1lmno2pqr3yup4lol".to_string();
-        assert_eq!(combine_first_last_int(&input), Some(14))
+        assert_eq!(combine_first_last_int(&input), Some(14));
     }
 
     #[test]
     fn test_combine_first_last_int_str() {
         let input: String = "onejk1lmno2pqr3yup4loltwothree".to_string();
-        assert_eq!(combine_first_last_int_str(&input), Some(13))
+        assert_eq!(combine_first_last_int_str(&input), Some(13));
     }
 
     #[test]

@@ -66,7 +66,7 @@ mod tests {
 
     #[test]
     fn test_solve_day2_part1() {
-        assert_eq!(solve_day2_part1().unwrap(), 2505)
+        assert_eq!(solve_day2_part1().unwrap(), 2505);
     }
 
     #[test]
