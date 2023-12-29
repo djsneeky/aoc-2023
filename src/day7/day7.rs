@@ -57,6 +57,8 @@ fn solve_day7_part1(input_path: &str) -> Result<u32, Box<dyn Error>> {
 }
 
 fn solve_day7_part2(input_path: &str) -> Result<u32, Box<dyn Error>> {
+    let _contents: String = fs::read_to_string(input_path)?;
+
     todo!();
 }
 
